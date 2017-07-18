@@ -135,7 +135,13 @@ public class MainActivity extends Activity {
             requestPermissions(new String[]{Manifest.permission.CAMERA},
                     MY_REQUEST_CODE);
         }
+
+
+
+
+
         i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
         startActivityForResult(i,cons);
 
         return;
@@ -153,6 +159,8 @@ public class MainActivity extends Activity {
             matrix.setSaturation(0);
             ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
             image.setColorFilter(filter);
+
+            System.out.print((image.getHeight()));
 
         }
 
