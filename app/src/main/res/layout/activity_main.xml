@@ -10,14 +10,14 @@
 
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="500dp"
-                    android:layout_height="300dp"
-
-                    android:background="@android:color/holo_blue_bright"
-                    android:contentDescription="TODO"
+                    android:layout_width="78dp"
+                    android:layout_height="104dp"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="18dp" />
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="46dp"
+                    android:background="@drawable/editborder"
+                    android:contentDescription="TODO"
+                    android:src="@mipmap/ic_launcher" />
 
                 <Button
                     android:id="@+id/buttonOn"

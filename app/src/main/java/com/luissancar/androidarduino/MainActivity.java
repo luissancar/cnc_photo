@@ -20,6 +20,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.LogPrinter;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import com.luissancar.androidarduino.DeviceListActivity;
 import com.luissancar.androidarduino.R;
+import android.util.Log;
 //https://github.com/patriotaSJ/Bluetooth
 public class MainActivity extends Activity {
 
@@ -154,12 +156,12 @@ public class MainActivity extends Activity {
         if (resultCode == Activity.RESULT_OK) {
             Bundle ext = data.getExtras();
             bmp = (Bitmap) ext.get("data");
-            image.setImageBitmap(bmp);
+            image.setImageBitmap(bmp);/*
             ColorMatrix matrix = new ColorMatrix();
             matrix.setSaturation(0);
             ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
             image.setColorFilter(filter);
-
+*/
             System.out.print((image.getHeight()));
 
         }
@@ -170,10 +172,22 @@ public class MainActivity extends Activity {
     private void printBitmap(Bitmap bitmap) {
         System.out.println(bitmap.getWidth());
         System.out.println(bitmap.getHeight());
+       // Toast.makeText(this,bitmap.getWidth(),Toast.LENGTH_LONG).show();
+      //  Toast.makeText(this,bitmap.getHeight(),Toast.LENGTH_LONG).show();
 
 
-        for (int x = 0; x < bitmap.getWidth(); x++) {
-            for (int y = 0; y < bitmap.getHeight(); y++) {
+
+            mConnectedThread.write("~");  // inicio  126
+        System.out.println("~");
+
+        try {
+        Thread.sleep(1000);}
+        catch (Exception e)
+        {}
+
+        for (int x = 0; x < 5; x++) {
+
+            for (int y = 0; y < 5; y++) {
                 // print("x ") ; println(x)
                 // print("y "); println(y)
                 int  p=bitmap.getPixel(x,y);
@@ -181,8 +195,17 @@ public class MainActivity extends Activity {
                 int R = (p >> 16) & 0xff;
                 int G = (p >> 8) & 0xff;
                 int B = p & 0xff;
-                mConnectedThread.write(String.valueOf(R));    // Send  via Bluetooth
-                System.out.println("rojo "+R +" verde "+G+" azul "+B);
+                R=R/2;
+
+                mConnectedThread.write(Character.valueOf(eliminaCaracteresControl((char)R)).toString());
+                System.out.println(R);
+
+               // mConnectedThread.write(String.valueOf(eliminaCaracteresControl(R)));
+                try {
+                    Thread.sleep(100);}
+                catch (Exception e)
+                {}
+                //System.out.println("rojo "+R +" verde "+G+" azul "+B);
                 /*
                 val A = color shr 24 and 0xff // or color >>> 24
                 val R = color shr 16 and 0xff
@@ -190,8 +213,26 @@ public class MainActivity extends Activity {
                 val B = color and 0xff
                 println("rojo $R, verde $G,azul $B")*/
             }
+
+            mConnectedThread.write("}");  // nueva fila 125
+            System.out.println("}");
+            try {
+                Thread.sleep(1000);}
+            catch (Exception e)
+            {}
         }
 
+
+        mConnectedThread.write("|"); // fin 124
+        System.out.println("|");
+        System.out.println("fin");
+    }
+
+    private char eliminaCaracteresControl(char car){
+        if (car == 124 || car == 125 || car == 126)
+            return 123; // valor 123
+        else
+            return car;
     }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
