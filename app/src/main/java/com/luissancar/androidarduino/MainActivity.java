@@ -187,9 +187,9 @@ public class MainActivity extends Activity {
         catch (Exception e)
         {}
 */
-        for (int x = 0; x < 5; x++) {
+        for (int x = 0; x < 50; x++) {
 
-            for (int y = 0; y < 5; y++) {
+            for (int y = 0; y < 50; y++) {
                 // print("x ") ; println(x)
                 // print("y "); println(y)
                 int  p=bitmap.getPixel(x,y);
@@ -197,17 +197,18 @@ public class MainActivity extends Activity {
                 int R = (p >> 16) & 0xff;
                 int G = (p >> 8) & 0xff;
                 int B = p & 0xff;
-                R=R/2;
+                //int color=((R+G+B)/3)/2;
 
-                mConnectedThread.write(Character.valueOf(eliminaCaracteresControl((char)R)).toString());
-                System.out.println(R);
+                mConnectedThread.write(Character.valueOf(eliminaCaracteresControl((char)A)).toString());
+
+                System.out.println(A);System.out.println(G);System.out.println(B);
 
                // mConnectedThread.write(String.valueOf(eliminaCaracteresControl(R)));
-       /*         try {
+                try {
                     Thread.sleep(100);}
                 catch (Exception e)
                 {}
-                */
+
                 //System.out.println("rojo "+R +" verde "+G+" azul "+B);
                 /*
                 val A = color shr 24 and 0xff // or color >>> 24
