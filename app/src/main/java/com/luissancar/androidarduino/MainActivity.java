@@ -182,11 +182,11 @@ public class MainActivity extends Activity {
             mConnectedThread.write("~");  // inicio  126
         System.out.println("~");
 
-        try {
+      /*  try {
         Thread.sleep(1000);}
         catch (Exception e)
         {}
-
+*/
         for (int x = 0; x < 5; x++) {
 
             for (int y = 0; y < 5; y++) {
@@ -203,10 +203,11 @@ public class MainActivity extends Activity {
                 System.out.println(R);
 
                // mConnectedThread.write(String.valueOf(eliminaCaracteresControl(R)));
-                try {
+       /*         try {
                     Thread.sleep(100);}
                 catch (Exception e)
                 {}
+                */
                 //System.out.println("rojo "+R +" verde "+G+" azul "+B);
                 /*
                 val A = color shr 24 and 0xff // or color >>> 24
@@ -218,10 +219,11 @@ public class MainActivity extends Activity {
 
             mConnectedThread.write("}");  // nueva fila 125
             System.out.println("}");
-            try {
+          /*  try {
                 Thread.sleep(1000);}
             catch (Exception e)
             {}
+            */
         }
 
 
