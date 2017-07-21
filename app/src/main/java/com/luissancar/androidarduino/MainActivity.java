@@ -16,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.Camera;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -156,6 +157,7 @@ public class MainActivity extends Activity {
         if (resultCode == Activity.RESULT_OK) {
             Bundle ext = data.getExtras();
             bmp = (Bitmap) ext.get("data");
+            bmp = redimensionarImagenMaximo(bmp,50,50);
             image.setImageBitmap(bmp);/*
             ColorMatrix matrix = new ColorMatrix();
             matrix.setSaturation(0);
@@ -235,6 +237,28 @@ public class MainActivity extends Activity {
             return car;
     }
 
+
+    /**
+     * Redimensionar un Bitmap. By TutorialAndroid.com
+     * @param Bitmap mBitmap
+     * @param float newHeight
+     * @param float newHeight
+     * @param float newHeight
+     * @return Bitmap
+     */
+    public Bitmap redimensionarImagenMaximo(Bitmap mBitmap, float newWidth, float newHeigth){
+        //Redimensionamos
+        int width = mBitmap.getWidth();
+        int height = mBitmap.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeigth) / height;
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight);
+        // recreate the new Bitmap
+        return Bitmap.createBitmap(mBitmap, 0, 0, width, height, matrix, false);
+    }
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
 
         return  device.createRfcommSocketToServiceRecord(BTMODULEUUID);
