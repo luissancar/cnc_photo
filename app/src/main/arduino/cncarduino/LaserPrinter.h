@@ -83,6 +83,15 @@ class LaserPrinter{
     laser = not laser;
     digitalWrite(LASER, laser);
   }
+
+  void on_laser(){
+      laser = true;
+      digitalWrite(LASER, HIGH);
+    }
+  void off_laser(){
+        laser = false;
+        digitalWrite(LASER, LOW);
+      }
   
   bool step(boolean dir, byte pin_stp, byte pin_dir){
     if( X_STP == pin_stp){

@@ -6,16 +6,20 @@ SoftwareSerial BT(10,11); //10 RX, 11 TX.
  int array[50][50];
  int x=0, y=0, xFinal=0, yFinal=0;
  bool arrayOk=false;
+ LaserPrinter laser;
  
 void setup()
 {
   BT.begin(9600); //Velocidad del puerto del módulo Bluetooth
   Serial.begin(9600); //Abrimos la comunicación serie con el PC y establecemos velocidad
+  
 }
  
 void loop()
 {
   cargaArray();
+  if (arrayOk)
+     imprimir();
      
   
  
@@ -82,5 +86,22 @@ void loop()
 
  void imprimir() {
   arrayOk=false;
+  int xI=0, yI=0;
+  for (int x=0; x<xFinal; x++) {
+    for (int y=0; y<yFinal; y++)  {
+      laser.MoveTo(xI,yI);
+      delay(200);
+      if (array[x][y]>100) {
+        laser.on_laser();
+        delay(1000);
+        laser.off_laser();
+        
+      }
+      yI=yI+3;
+      }
+    xI=xI+3;
+    yI=0;
+      
+  }
  }
 
