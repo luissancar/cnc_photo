@@ -1,26 +1,44 @@
-#include <SoftwareSerial.h> //Librería que permite establecer comunicación serie en otros pins
+// #include <SoftwareSerial.h> //Librería que permite establecer comunicación serie en otros pins
 #include "LaserPrinter.h"
 //Aquí conectamos los pins RXD,TDX del módulo Bluetooth.
-SoftwareSerial BT(10,11); //10 RX, 11 TX.
+// SoftwareSerial BT(10,11); //10 RX, 11 TX.
  int incomingByte = 0;
- int array[50][50];
- int x=0, y=0, xFinal=0, yFinal=0;
+ 
+ int x=0, y=0, xFinal=10, yFinal=10;
  bool arrayOk=false;
  LaserPrinter laser;
+ int xI=0,x2=0, y2=0, yI=0;
  
 void setup()
 {
-  BT.begin(9600); //Velocidad del puerto del módulo Bluetooth
+ // BT.begin(9600); //Velocidad del puerto del módulo Bluetooth
   Serial.begin(9600); //Abrimos la comunicación serie con el PC y establecemos velocidad
   
 }
  
 void loop()
 {
+ 
+  // imprimir();  
+
+   
+  
   cargaArray();
-  if (arrayOk)
-     imprimir();
-     
+ // if (arrayOk)
+   //  imprimir();
+     /*
+     int a=0, b=200;
+    laser.MoveTo(a,a);
+    delay(1000);
+    laser.MoveTo(a,b);
+    delay(1000);
+   // laser.on_laser();
+    laser.MoveTo(b,a);
+    delay(1000);
+    laser.MoveTo(b,b);
+    delay(1000);
+    laser.off_laser();*/
+      
   
  
   
@@ -29,54 +47,69 @@ void loop()
 
 
   void cargaArray() {
-           
-  if(BT.available())
+
+    
+  
+  //if(BT.available())
+  if(Serial.available())
   {
-    incomingByte=BT.read();
-    Serial.println( incomingByte); 
+    
+    incomingByte=Serial.read();
     if (incomingByte==126) { // inicio
-      Serial.println("Inicio");  
-     // delay(2000);
+      
       x=0;
       y=0;
       while (true)  {
-        if(BT.available()) {
-            incomingByte=BT.read();
+     
+         if(Serial.available()) { 
+            //incomingByte=BT.read();
+            incomingByte=Serial.read();
             if (incomingByte==125)      // nueva fila
             {
-               x++;
+               //x++;
+               x=x+2;
                y=0;
-               Serial.println("Fila"); 
-           //    delay(200);
             }
             else
                if (incomingByte==124)   // fin
                 {
 
-                  Serial.print("fin ");
                    break;  
 
                 }
                else
                     {
-                     // array[x][y++]=incomingByte; // no hay memoria
-                    
-                     Serial.print("x ");
-                     Serial.print(x);
-                     Serial.print(" y ");
-                     Serial.print(y);
-                     Serial.print("  ");
-                     array[x][y];
-                     Serial.println(incomingByte);  
-                      y++;  
-                   //  delay(200);
+                    // array2[x][y]=incomingByte;          
+                     y=y+2; 
+                     
+                  laser.MoveTo(x,y);
+                  laser.on_laser();
+                  delay(incomingByte * 3);
+                  laser.off_laser();
                    }
             }
         }   
+        while(true) {
+          
+        }
         arrayOk=true; 
         xFinal=x-1;
         yFinal=y-1; 
-    }
+        yI=0;
+        xI=0;/*
+        for (x2=0; x2<xFinal; x2++) {
+             for ( y2=0; y2<yFinal; y2++)  {
+               if (array2[x2][y2]>10) {
+                  laser.MoveTo(xI,yI);
+                  laser.on_laser();
+                  delay(array2[x2][y2] * 3);
+                  laser.off_laser();
+                }
+              }
+     
+          }*/
+  
+      }
     
     
   }
@@ -85,23 +118,5 @@ void loop()
 
 
  void imprimir() {
-  arrayOk=false;
-  int xI=0, yI=0;
-  for (int x=0; x<xFinal; x++) {
-    for (int y=0; y<yFinal; y++)  {
-      laser.MoveTo(xI,yI);
-      delay(200);
-      if (array[x][y]>100) {
-        laser.on_laser();
-        delay(1000);
-        laser.off_laser();
-        
-      }
-      yI=yI+3;
-      }
-    xI=xI+3;
-    yI=0;
-      
-  }
  }
 

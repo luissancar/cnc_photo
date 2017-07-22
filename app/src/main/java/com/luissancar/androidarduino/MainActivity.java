@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
-
+import android.app.ProgressDialog;
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -35,7 +35,7 @@ import com.luissancar.androidarduino.R;
 import android.util.Log;
 //https://github.com/patriotaSJ/Bluetooth
 public class MainActivity extends Activity {
-
+    private ProgressDialog progress;
     Button btnOn, btnPrn;
     ImageView image;
     Bitmap bmp;
@@ -158,12 +158,12 @@ public class MainActivity extends Activity {
             Bundle ext = data.getExtras();
             bmp = (Bitmap) ext.get("data");
             bmp = redimensionarImagenMaximo(bmp,50,50);
-            image.setImageBitmap(bmp);/*
+            image.setImageBitmap(bmp);
             ColorMatrix matrix = new ColorMatrix();
             matrix.setSaturation(0);
             ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
             image.setColorFilter(filter);
-*/
+
             System.out.print((image.getHeight()));
 
         }
@@ -187,7 +187,11 @@ public class MainActivity extends Activity {
         catch (Exception e)
         {}
 */
+
+
+
         for (int x = 0; x < 50; x++) {
+
 
             for (int y = 0; y < 50; y++) {
                 // print("x ") ; println(x)
@@ -201,11 +205,11 @@ public class MainActivity extends Activity {
 
                 mConnectedThread.write(Character.valueOf(eliminaCaracteresControl((char)A)).toString());
 
-                System.out.println(A);System.out.println(G);System.out.println(B);
+                System.out.println(A);
 
                // mConnectedThread.write(String.valueOf(eliminaCaracteresControl(R)));
                 try {
-                    Thread.sleep(100);}
+                    Thread.sleep(500);}
                 catch (Exception e)
                 {}
 
