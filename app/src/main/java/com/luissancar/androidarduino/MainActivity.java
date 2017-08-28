@@ -35,11 +35,14 @@ import com.luissancar.androidarduino.R;
 import android.util.Log;
 //https://github.com/patriotaSJ/Bluetooth
 public class MainActivity extends Activity {
-    private ProgressDialog progress;
+    private ProgressDialog prBar;
+    private int prBarSts;
+    private Handler prBarbHndr = new Handler();
     Button btnOn, btnPrn;
     ImageView image;
     Bitmap bmp;
     Intent i;
+    int xGlobal;
     int MY_REQUEST_CODE;
     private SurfaceHolder mHolder;
     private Camera mCamera;
@@ -157,7 +160,7 @@ public class MainActivity extends Activity {
         if (resultCode == Activity.RESULT_OK) {
             Bundle ext = data.getExtras();
             bmp = (Bitmap) ext.get("data");
-            bmp = redimensionarImagenMaximo(bmp,50,50);
+           // bmp = redimensionarImagenMaximo(bmp,50,50);
             image.setImageBitmap(bmp);
             ColorMatrix matrix = new ColorMatrix();
             matrix.setSaturation(0);
@@ -179,7 +182,45 @@ public class MainActivity extends Activity {
 
 
 
-            mConnectedThread.write("~");  // inicio  126
+        prBar = new ProgressDialog(this);
+        prBar.setCancelable(true);
+        prBar.setMessage("Enviando ..");
+        prBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        prBar.setProgress(0);
+        prBar.setMax(100);
+        prBar.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (prBarSts < 100){
+                    prBarSts = xGlobal;
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    prBarbHndr.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            String nsj = String.format("Enviando %d %%",prBarSts);
+                            prBar.setProgress(prBarSts);
+                            prBar.setMessage(nsj);
+                        }
+                    });
+                }
+                if (prBarSts >=100) {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                prBar.dismiss();
+            }
+        }).start();
+
+                mConnectedThread.write("~");  // inicio  126
         System.out.println("~");
 
       /*  try {
@@ -188,12 +229,12 @@ public class MainActivity extends Activity {
         {}
 */
 
+        xGlobal=0;
+        // 20 X 20 para que sea rápido
+        for (int x = 0; x < bitmap.getHeight(); x++) {
 
-
-        for (int x = 0; x < 50; x++) {
-
-
-            for (int y = 0; y < 50; y++) {
+            xGlobal=x;
+            for (int y = 0; y < bitmap.getWidth(); y++) {
                 // print("x ") ; println(x)
                 // print("y "); println(y)
                 int  p=bitmap.getPixel(x,y);
